@@ -17,7 +17,6 @@ a = pd.read_csv("Planilha sem título - Página1.csv")
 # plt.show()
 # plt.close("all")
 
-
 # # ajustando dados de renda familiar para voltar para categorias em string
 b = a['Renda familiar']
 for n,c in enumerate(b):
