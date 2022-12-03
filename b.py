@@ -1,9 +1,114 @@
 import pandas as pd, numpy as np
 import matplotlib.pyplot as plt
 
+
+def filter(v,f):
+    return f[v]
+
 # lendo planilha
 a = pd.read_csv("Planilha sem título - Página1.csv")
 
+
+#intenet atrapalha x tempo de estudo
+b = a[['Você acredita que a internet atrapalha em sua formação?',"Tempo de estudo diário"]]
+
+print(b)
+resp = {}
+for n in range(b.last_valid_index()):
+    t,y = b.iloc[n]
+    resp.setdefault(t,{})
+    resp[t].setdefault(y,0)
+    resp[t][y]+=1
+print(pd.DataFrame(resp))
+fig, axs = plt.subplots(len(resp))
+for n,(disp,horas) in enumerate(resp.items()):
+    axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+    axs[n].set_title('Atrapalha' if  disp == 'Sim' else 'Não Atraplha')
+plt.savefig('intenet atrapalha x temp de estudo')
+
+exit()
+#intenet atrapalha x como se sente
+b = a[['Você acredita que a internet atrapalha em sua formação?',"Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"]]
+
+filtro = {'Estou entusiasmado e quero saber muito mais':1,
+            'Acho tudo muito difícil e complicado':2,
+            "Sou obrigada a aprender para poder estudar e/ou trabalhar":3,
+            'Sou obrigado(a) a aprender para poder estudar e/ou trabalhar':4}
+
+b["Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"] = b["Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"].apply(filter,args=(filtro,))
+
+
+print(b)
+resp = {}
+for n in range(b.last_valid_index()):
+    t,y = b.iloc[n]
+    resp.setdefault(t,{})
+    resp[t].setdefault(y,0)
+    resp[t][y]+=1
+print(pd.DataFrame(resp))
+fig, axs = plt.subplots(len(resp))
+for n,(disp,horas) in enumerate(resp.items()):
+    axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+    axs[n].set_title('Atrapalha' if  disp == 'Sim' else 'Não Atraplha')
+plt.savefig('intenet atrapalha x como se sente')
+
+#Renda familiar x dispositivo
+b = a[['Renda familiar',"Qual dispositivo você mais utiliza?"]]
+b.fillna('Não Respondeu',inplace= True)
+b['Renda familiar'] = ["Até 1 salário mínimo" if c == 1 else "De 1 a 3 salários mínimos" if c==2 else "De 3 a 5 salários mínimos" if c==3 else "De 5 a 7 salários mínimos" if c == 4 else "7+ salários mínimos" if c == 5 else "Não Respondeu" for c in b['Renda familiar']]
+# print(b)
+resp = {}
+for n in range(b.last_valid_index()):
+    t,y = b.iloc[n]
+    resp.setdefault(t,{})
+    resp[t].setdefault(y,0)
+    resp[t][y]+=1
+print(pd.DataFrame(resp).fillna(0))
+fig, axs = plt.subplots(3,2)
+for n,(disp,horas) in enumerate(resp.items()):
+    x , y = n if n-3 < 0 else n-3,0 if n-3 < 0 else 1
+    axs[x,y].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+    axs[x,y].set_title(disp)
+plt.savefig('Renda familiar X Dispositivo')
+
+#Renda familiar x tempo de uso diario
+b = a[['Renda familiar',"Em geral, quanto tempo você permanece conectado à intenet diariamente?"]]
+b.fillna('Não Respondeu',inplace= True)
+
+b['Renda familiar'] = ["Até 1 salário mínimo" if c == 1 else "De 1 a 3 salários mínimos" if c==2 else "De 3 a 5 salários mínimos" if c==3 else "De 5 a 7 salários mínimos" if c == 4 else "7+ salários mínimos" if c == 5 else "Não Respondeu" for c in b['Renda familiar']]
+
+# print(b)
+resp = {}
+for n in range(b.last_valid_index()):
+    t,y = b.iloc[n]
+    resp.setdefault(t,{})
+    resp[t].setdefault(y,0)
+    resp[t][y]+=1
+print(pd.DataFrame(resp).fillna(0))
+fig, axs = plt.subplots(3,2)
+for n,(disp,horas) in enumerate(resp.items()):
+    x , y = n if n-3 < 0 else n-3,0 if n-3 < 0 else 1
+    axs[x,y].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+    axs[x,y].set_title(disp)
+plt.savefig('Renda familiar X Tempo conectado')
+a = pd.read_csv("Planilha sem título - Página1.csv")
+#Relação Semestre tempo de uso
+a['Cursando semestre:'] = [ "acima" if b>5 else 'abaixo' for b in a['Cursando semestre:']]
+b = a[['Cursando semestre:',"Em geral, quanto tempo você permanece conectado à intenet diariamente?"]]
+# print(b)
+resp = {}
+for n in range(b.last_valid_index()):
+    t,y = b.iloc[n]
+    resp.setdefault(t,{})
+    resp[t].setdefault(y,0)
+    resp[t][y]+=1
+print(pd.DataFrame(resp))
+fig, axs = plt.subplots(len(resp))
+for n,(disp,horas) in enumerate(resp.items()):
+    axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+    axs[n].set_title(disp)
+plt.savefig('Dispositivo X semestre')
+#Relação dispositivo tempo de uso
 b = a[['Qual dispositivo você mais utiliza?',"Em geral, quanto tempo você permanece conectado à intenet diariamente?"]]
 # print(b)
 resp = {}
@@ -12,12 +117,13 @@ for n in range(b.last_valid_index()):
     resp.setdefault(t,{})
     resp[t].setdefault(y,0)
     resp[t][y]+=1
+print('Dados de tempo de uso por dispositivo mais usado')
+print(pd.DataFrame(resp))
 fig, axs = plt.subplots(len(resp))
 for n,(disp,horas) in enumerate(resp.items()):
     axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
     axs[n].set_title(disp)
 plt.savefig('Dispositivo X tempo de uso')
-exit()
 
 
 
