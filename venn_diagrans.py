@@ -7,9 +7,11 @@ from time import perf_counter
 #tempo sem multthreading sem print:53.18989919999876  s
 #tempo com multthreading com print:2.1584835999965435 s
 #tempo com multthreading sem print:2.1706609000029857 s
+#usar a de baixo para usar respostas_dataframe compartilhado entre todas as thread para ganho de performace
+# def perg(coll,name,labels,respostas_dataframe):
 def perg(coll,name,labels):
     print(name,coll)
-    b = a[coll].apply(lambda x: x == 'Sim')
+    b = respostas_dataframe[coll].apply(lambda x: x == 'Sim')
     # print(b)
     v = [True,False]
     resp = {q:{ q:{ q:0 for q in v} for q in v } for q in v }
@@ -29,7 +31,7 @@ def perg(coll,name,labels):
     plt.savefig('venn//'+name)
     plt.close("all")
 def main():
-    a = pd.read_csv("Planilha sem título - Página1.csv")
+    respostas_dataframe = pd.read_csv("Planilha sem título - Página1.csv")
     perguntas_s_n_vet = ["Você utiliza a internet para trabalho?","Você utiliza a internet para conversar com amigos?",
                 "Você utiliza a internet para conversar com desconhecidos?","Você utiliza e-mail?",
                 "Você utiliza a internet para realizar Pesquisas Acadêmicas?","Você utiliza a internet para acessar noticias?",
@@ -44,6 +46,8 @@ def main():
             for i,w in enumerate(perguntas_s_n_vet[n+1:]):
                 for j,e in enumerate(perguntas_s_n_vet[i+2:]):
                     executor.submit(perg,[q,w,e], name= f'{n+14}_{i+15}_{j+16}',labels=(f'Pergunta {n+14}',f'Pergunta {i+15}',f'Pergunta {j+16}'))
+                    # esssa versao abaixo demora mais tempo uma vez que o dataframe esta sendo copiado e mandado pra cada thread, enquanto na de cima o datrame usado é compartilhado por todas as thread
+                    # executor.submit(perg,[q,w,e], name= f'{n+14}_{i+15}_{j+16}',labels=(f'Pergunta {n+14}',f'Pergunta {i+15}',f'Pergunta {j+16}'),respostas_dataframe=respostas_dataframe)
 
 if __name__ == '__main__':
     t1 = perf_counter()
