@@ -44,29 +44,33 @@ a = pd.read_csv("Planilha sem título - Página1.csv")
 
 
 
-# ## plot da qtd de intrevistados por semestre
-# print()
-# print('Distribuição de entrevistados por semestre:')
-# print(a['Cursando semestre:'].value_counts().sort_index())
-# a['Cursando semestre:'].value_counts().sort_index().plot.bar()
-# plt.savefig("intrevistados por semestre")
-# plt.close("all")
+## plot da qtd de intrevistados por semestre
+print()
+print('Distribuição de entrevistados por semestre:')
+print(a['Cursando semestre:'].value_counts().sort_index())
+b = a["Cursando semestre:"]
+print('Semestre medio:',b.mean(),', Mediana: ',b.median())
+print('Desvio padrao:',b.std(),', Variancia: ',b.var())
+print()
+a['Cursando semestre:'].value_counts().sort_index().plot.bar()
+plt.savefig("intrevistados por semestre")
+plt.close("all")
 
 # ##Graficos de Renda familiar dos intrevistados
 # # ajustando dados de renda familiar para voltar para categorias em string
-# a['Renda familiar'] = a['Renda familiar'].apply(lambda c: "Até 1 salário mínimo" if c == 1 
-#                                                         else "De 1 a 3 salários mínimos" if c==2 
-#                                                         else "De 3 a 5 salários mínimos" if c==3 
-#                                                         else "De 5 a 7 salários mínimos" if c == 4 
-#                                                         else "7+ salários mínimos" if c == 5 
-#                                                         else "Não Respondeu")
+a['Renda_familiar_filtrado'] = a['Renda familiar'].apply(lambda c: "Até 1 salário mínimo" if c == 1 
+                                                        else "De 1 a 3 salários mínimos" if c==2 
+                                                        else "De 3 a 5 salários mínimos" if c==3 
+                                                        else "De 5 a 7 salários mínimos" if c == 4 
+                                                        else "7+ salários mínimos" if c == 5 
+                                                        else "Não Respondeu")
 # # grafico de quantidade de intrevistado por categoria em renda familiar
-# a['Renda familiar'].value_counts().plot.barh(figsize=(16,9))
+# a['Renda_familiar_filtrado'].value_counts().plot.barh(figsize=(16,9))
 # plt.savefig("distribuição renda familiarrenda familiar")
 # plt.close("all")
 # print()
 # print("distribuição renda familiar")
-# print(a['Renda familiar'].value_counts().sort_index())
+# print(a['Renda_familiar_filtrado'].value_counts().sort_index())
 
 
 # ##grafico de pizza de dsipositivo mais usado
@@ -166,44 +170,56 @@ def filter(v,f):
 # plt.subplots_adjust(left = 0.02 , right=.92,)
 
 # plt.savefig('computador representa, sentimento informatica')
+# plt.close("all")
 # print()
 # print('Matrix de respostas das ultimas 2 perguntas:')
 # print(temp.value_counts())
 
 
+def graf_coluna(resp):
+    fig, axs = plt.subplots(len(resp))
+    for n,(disp,horas) in enumerate(resp.items()):
+        axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+        axs[n].set_title(disp)
+
+def graficos_pizza_para_2_perguntas(pergutna1:str,pergunta2:str,dataframe:pd.DataFrame,nome_arquivo:str,show:bool=False, grafico = graf_coluna):
+    '''
+        Faz a matriz de respostas para pergunta1 e pergunta2 presentes no dataframe, chamando a função grafico que recebera 
+            o objeto contendo a matriz de respsotas. Sendo printado o dataframe resultante da matriz de respostas.
+
+        grafico-> função que gera o grafico a ser salvo
+
+        nome_arquivo -> nome que o plot sera salvo, na mesma pasta de execução
+        show-> mostra o plot ( acontece antes de salvar )
+    '''
+    b = dataframe[[pergutna1,pergunta2]]
+    resp = {}
+    for n in range(b.last_valid_index()+1):
+        t,y = b.iloc[n]
+        resp.setdefault(t,{})
+        resp[t].setdefault(y,0)
+        resp[t][y]+=1
+    print()
+    print(nome_arquivo)
+    print(pd.DataFrame(resp))
+    grafico(resp)
+    if show:
+        plt.show()
+    if nome_arquivo is not None and nome_arquivo != '':
+        plt.savefig(nome_arquivo)
+    plt.close("all")
+
+
 # ##Relação dispositivo mais usado e tempo de uso
-# b = a[['Qual dispositivo você mais utiliza?',"Em geral, quanto tempo você permanece conectado à intenet diariamente?"]]
-# # print(b)
-# resp = {}
-# for n in range(b.last_valid_index()):
-#     t,y = b.iloc[n]
-#     resp.setdefault(t,{})
-#     resp[t].setdefault(y,0)
-#     resp[t][y]+=1
-# print('Dados de tempo de uso por dispositivo mais usado')
-# print(pd.DataFrame(resp))
-# fig, axs = plt.subplots(len(resp))
-# for n,(disp,horas) in enumerate(resp.items()):
-#     axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
-#     axs[n].set_title(disp)
-# plt.savefig('Dispositivo X tempo de uso')
+# graficos_pizza_para_2_perguntas('Qual dispositivo você mais utiliza?',
+#     "Em geral, quanto tempo você permanece conectado à intenet diariamente?",a,'Dispositivo X tempo de uso')
 
 # ##Relação Semestre com tempo de uso
+# #filtro para semestre que sera usado para este grafico
 # a['acima_abaixo'] = [ "acima do 5º semestre" if b>5 else 'abaixo do 5º semestre' for b in a['Cursando semestre:']]
-# b = a[['acima_abaixo',"Em geral, quanto tempo você permanece conectado à intenet diariamente?"]]
-# # print(b)
-# resp = {}
-# for n in range(b.last_valid_index()):
-#     t,y = b.iloc[n]
-#     resp.setdefault(t,{})
-#     resp[t].setdefault(y,0)
-#     resp[t][y]+=1
-# print(pd.DataFrame(resp))
-# fig, axs = plt.subplots(len(resp))
-# for n,(disp,horas) in enumerate(resp.items()):
-#     axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
-#     axs[n].set_title(disp)
-# plt.savefig('tempo de uso X semestre')
+
+# graficos_pizza_para_2_perguntas("acima_abaixo",
+#     "Em geral, quanto tempo você permanece conectado à intenet diariamente?",a,"tempo de uso X semestre")
 
 # ##intenet atrapalha x como se sente
 # filtro = {'Estou entusiasmado e quero saber muito mais':1,
@@ -211,78 +227,59 @@ def filter(v,f):
 #             "Sou obrigada a aprender para poder estudar e/ou trabalhar":3,
 #             'Sou obrigado(a) a aprender para poder estudar e/ou trabalhar':3}
 
-# a["Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"] = a["Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"].apply(filter,args=(filtro,))
+# a["se_sente_informatica_filtro1"] = a["Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"].apply(filter,args=(filtro,))
 # resp = {}
-# b = a[['Você acredita que a internet atrapalha em sua formação?',"Dentre as opções, qual mais se assemelha a como você se sente em relação a informática?"]]
+# b = a[['Você acredita que a internet atrapalha em sua formação?',"se_sente_informatica_filtro1"]]
 
 # for n in range(b.last_valid_index()):
 #     t,y = b.iloc[n]
 #     resp.setdefault(t,{})
 #     resp[t].setdefault(y,0)
 #     resp[t][y]+=1
+# print()
 # print(pd.DataFrame(resp))
 # fig, axs = plt.subplots(len(resp))
 # for n,(disp,horas) in enumerate(resp.items()):
 #     axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
 #     axs[n].set_title('Atrapalha' if  disp == 'Sim' else 'Não Atrapalha')
 # plt.savefig('intenet atrapalha x como se sente')
-
-## Como se sente em relação a computador X tempo de uso
-filtro = {'É um avanço da tecnologia que está melhorando a vida das pessoas':1,
-            'Um jeito mais rápido e eficiente para me comunicar com as pessoas':2,
-            "Só atrapalha a vida das pessoas que agora têm que aprender muito mais para poder fazer as mesmas coisas.":3}
-
-a["Dentre as opções, qual mais se assemelha ao que o computador representa para você?"] = a["Dentre as opções, qual mais se assemelha ao que o computador representa para você?"].apply(filter,args=(filtro,))
-b = a[["Dentre as opções, qual mais se assemelha ao que o computador representa para você?","Em geral, quanto tempo você permanece conectado à intenet diariamente?"]] 
-
-print(b.value_counts())
-
-
-
-# #função que retorna o valores de t qando r == k ou NaN
-# def f(r,t,k):
-#     return [ f if  k == e else np.NaN for e,f in zip(r.values,t.values) ]
-
-# vetor de sexo de alunos que estudam a noite
-# t = f(a["Qual o turno do seu curso?"],a['Sexo'],'Noturno')
-
-# # neste plote tera 2 graficos em cima a qtd de alunos que estudam a noite
-# #  no de baixo a qtd de alunos que estudam noite + diurno
-
-# # Fazendo subplot de do grafico dos alunos que estudam a noite
-# ax = plt.subplot(2,1,1)
-# ax.set_title('Alunos que estudam Noturno')
-# t = pd.Series(t).dropna().value_counts()
-# ax.bar(t.keys(),t.values)
-# # pd.Series(t).dropna().value_counts().plot.barh()
-
-# # vetor de sexo de alunos que estudam a noite + diurno
-# t = f(a["Qual o turno do seu curso?"],a['Sexo'],'Diurno, Noturno')
-# # pd.Series(t).dropna().value_counts().plot.barh()
-
-# # subplot do grafico de qtd de alunos noite + diurno
-# ax = plt.subplot(2,1,2)
-# ax.set_title('Alunos que estudam Diurno + Noturno')
-# t = pd.Series(t).dropna().value_counts()
-# ax.bar(t.keys(),t.values)
-
-# plt.show()
-# plt.close("all")
-# print(t)
-
-
-
-
-
-
-# grafico de pizza de tempo de uso diario de internet
-# a["Em geral, quanto tempo você permanece conectado à intenet diariamente?"].value_counts().sort_index().plot.bar()
-# plt.ylabel('Tempo de uso da intenet diario')
-# plt.show()
 # plt.close("all")
 
+# ## Como se sente em relação a computador X tempo de uso
+# #filtros para o que o computador representa
+# filtro = {'É um avanço da tecnologia que está melhorando a vida das pessoas':'É um avanço da tecnologia que está melhorando a vida das pessoas',
+#             'Um jeito mais rápido e eficiente para me comunicar com as pessoas':'Um jeito mais rápido e eficiente para me comunicar com as pessoas',
+#             "Só atrapalha a vida das pessoas que agora têm que aprender muito mais para poder fazer as mesmas coisas.":"Só atrapalha a vida das pessoas"}
+# # filtrando no dataframe de resposta
+# a["comp_representa_filtro2"] = a["Dentre as opções, qual mais se assemelha ao que o computador representa para você?"].apply(filter,args=(filtro,))
+# # montando grafico
+# graficos_pizza_para_2_perguntas("comp_representa_filtro2",
+#     "Em geral, quanto tempo você permanece conectado à intenet diariamente?",a,"Computador representa x temp de estudo")
 
-# ## grafico de intrevistados por turno estudado
-# a["Qual o turno do seu curso?"].value_counts().plot.barh()
-# plt.savefig("qtd de intrevistado por turno estudado")
-# plt.close("all")
+
+# ##sexo por dispositivo mais usado
+# graficos_pizza_para_2_perguntas("Sexo","Qual dispositivo você mais utiliza?",a,"Sexo x Dispositivo")
+
+# ##sexo por dispositivo mais usado
+# graficos_pizza_para_2_perguntas("Sexo","Você utiliza a internet para participar de jogos online?",a,"Sexo x joga online")
+
+##sexo por dispositivo mais usado
+# graficos_pizza_para_2_perguntas("Sexo","Em geral, quanto tempo você permanece conectado à intenet diariamente?",a,'Sexo x Tempo uso')
+
+
+def grafico_3_2(resp):
+    fig, axs = plt.subplots(3,2)
+    for n,(disp,horas) in enumerate(resp.items()):
+        x , y = n if n-3 < 0 else n-3,0 if n-3 < 0 else 1
+        axs[x,y].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
+        axs[x,y].set_title(disp)
+##Renda familiar x dispositivo
+b = a[['Renda_familiar_filtrado',"Qual dispositivo você mais utiliza?"]]
+graficos_pizza_para_2_perguntas('Renda_familiar_filtrado',"Qual dispositivo você mais utiliza?",a,
+                                'Renda familiar X Dispositivo',grafico = grafico_3_2)
+##Renda x Tempo de uso diario
+graficos_pizza_para_2_perguntas('Renda_familiar_filtrado',"Em geral, quanto tempo você permanece conectado à intenet diariamente?"
+                                ,a,'Renda familiar X Tempo conectado',grafico = grafico_3_2)
+## Renda por sexo
+# graficos_pizza_para_2_perguntas('Renda_familiar_filtrado',"Sexo"
+#                                 ,a,None,True,grafico = grafico_3_2)
