@@ -92,14 +92,16 @@ perguntas_s_n_vet = ["Você utiliza a internet para trabalho?","Você utiliza a 
 perguntas_s_n_labels_vet = ['Para trabalho','Converça com amigos','Conversa com estranhos','Usa email','Pesquisas academicas',
                             'Ver noticias','Compras','Ver vidios','Jogar','Atraplahar formação','Redes sociais toxicas',
                             'Download de conteudo']
-#criando blocos
+#criando blocos de pergutnas
 block_size = 3 # quantidade de perguntas por grafico
 blocos = [ 
             [ (pergunta,label) for pergunta,label in zip(perguntas_s_n_vet[n*block_size:(n+1)*block_size],
                                                          perguntas_s_n_labels_vet[n*block_size:(n+1)*block_size]) 
             ] for n in range(int(len(perguntas_s_n_vet)/block_size)) 
         ]
+# Para cada bloco
 for bloco_numero,pergunta_label in enumerate(blocos):
+    # separando as respostas das pergutnas
     resp = [ a[pergunta].value_counts() for pergunta,label in pergunta_label ]
     possiveis_resp = {"Sim":[],'Não':[]}
     for n,b in enumerate(resp):
@@ -109,23 +111,27 @@ for bloco_numero,pergunta_label in enumerate(blocos):
                 value.append(b[key])
             except KeyError:
                 value.append(0)
-
+    #criando plot do bloco
     fig, ax = plt.subplots(figsize=(32,9))
     fig.subplots_adjust(left=0,right=1)
     plots = []
+    #plotando 
     for n,(key,value) in enumerate(possiveis_resp.items()):
         plot = ax.bar([label for pergunta,label in pergunta_label], value, 0.5, label=key,bottom= 0 if n==0 else temp)
         plots.append(plot)
         temp = value
+    #ajustando plot
     for plot in plots:
         ax.bar_label(plot, label_type='center', fontsize=50)
         for item in ax.xaxis.get_ticklabels():
             item.set_fontsize(40)
     ax.legend(fontsize=30)
+    #salvando
     plt.savefig(f'img//perguntas_{bloco_numero}')
     plt.close("all")
 
 ## Grafico das 2 ultimas pergutnas
+#filtro para passar no dataframe
 def filter(v,f):
     return f[v]
 
@@ -176,6 +182,9 @@ print(temp.value_counts())
 
 
 def graf_coluna(resp):
+    '''
+        Função para geração de graficos em coluna, 1 linha para cada grafico com 1 unica coluna
+    '''
     fig, axs = plt.subplots(len(resp))
     for n,(disp,horas) in enumerate(resp.items()):
         axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
@@ -267,6 +276,9 @@ graficos_pizza_para_2_perguntas("Sexo","Em geral, quanto tempo você permanece c
 
 
 def grafico_3_2(resp):
+    '''
+        Realiza o plot dos graficos de piza em uma disposição de 3 linhas e 2 colunas
+    '''
     fig, axs = plt.subplots(3,2)
     for n,(disp,horas) in enumerate(resp.items()):
         x , y = n if n-3 < 0 else n-3,0 if n-3 < 0 else 1
