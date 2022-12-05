@@ -8,12 +8,12 @@ a = pd.read_csv("Planilha sem título - Página1.csv")
 
 # ## Gerando histograma da idade dos intrevistados
 # a['Idade:'].value_counts().sort_index().plot.bar()
-# plt.savefig("grafico idade")
+# plt.savefig("img//grafico idade")
 # plt.close("all")
 
 # ##grafico de quantidade de intervistados por sexo
 # a['Sexo'].value_counts().plot.pie(autopct='%.02f%%')
-# plt.savefig("sexo")
+# plt.savefig("img//sexo")
 # plt.close("all")
 
 
@@ -38,7 +38,7 @@ a = pd.read_csv("Planilha sem título - Página1.csv")
 #     axs[n].bar(contagem.keys(),contagem.values())
 #     axs[n].set_title(sexo)
 # #salvando
-# plt.savefig("idade por genero")
+# plt.savefig("img//idade por genero")
 # #limpando grafico para uso futuro
 # plt.close("all")
 
@@ -53,7 +53,7 @@ print('Semestre medio:',b.mean(),', Mediana: ',b.median())
 print('Desvio padrao:',b.std(),', Variancia: ',b.var())
 print()
 a['Cursando semestre:'].value_counts().sort_index().plot.bar()
-plt.savefig("intrevistados por semestre")
+plt.savefig("img//intrevistados por semestre")
 plt.close("all")
 
 # ##Graficos de Renda familiar dos intrevistados
@@ -66,7 +66,7 @@ a['Renda_familiar_filtrado'] = a['Renda familiar'].apply(lambda c: "Até 1 salá
                                                         else "Não Respondeu")
 # # grafico de quantidade de intrevistado por categoria em renda familiar
 # a['Renda_familiar_filtrado'].value_counts().plot.barh(figsize=(16,9))
-# plt.savefig("distribuição renda familiarrenda familiar")
+# plt.savefig("img//distribuição renda familiarrenda familiar")
 # plt.close("all")
 # print()
 # print("distribuição renda familiar")
@@ -75,7 +75,7 @@ a['Renda_familiar_filtrado'] = a['Renda familiar'].apply(lambda c: "Até 1 salá
 
 # ##grafico de pizza de dsipositivo mais usado
 # a['Qual dispositivo você mais utiliza?'].value_counts().sort_index().plot.pie(autopct="%.2f%%")
-# plt.savefig("dispositimo mais usado")
+# plt.savefig("img//dispositimo mais usado")
 # plt.close("all")
 # print()
 # print('quantidade de intrevistados por aparelho:')
@@ -123,7 +123,7 @@ a['Renda_familiar_filtrado'] = a['Renda familiar'].apply(lambda c: "Até 1 salá
 #         for item in ax.xaxis.get_ticklabels():
 #             item.set_fontsize(40)
 #     ax.legend(fontsize=30)
-#     plt.savefig(f'perguntas_{bloco_numero}')
+#     plt.savefig(f'img//perguntas_{bloco_numero}')
 #     plt.close("all")
 
 # ## Grafico das 2 ultimas pergutnas
@@ -169,7 +169,7 @@ def filter(v,f):
 
 # plt.subplots_adjust(left = 0.02 , right=.92,)
 
-# plt.savefig('computador representa, sentimento informatica')
+# plt.savefig('img//computador representa, sentimento informatica')
 # plt.close("all")
 # print()
 # print('Matrix de respostas das ultimas 2 perguntas:')
@@ -206,7 +206,7 @@ def graficos_pizza_para_2_perguntas(pergutna1:str,pergunta2:str,dataframe:pd.Dat
     if show:
         plt.show()
     if nome_arquivo is not None and nome_arquivo != '':
-        plt.savefig(nome_arquivo)
+        plt.savefig('img//'+nome_arquivo)
     plt.close("all")
 
 
@@ -242,7 +242,7 @@ def graficos_pizza_para_2_perguntas(pergutna1:str,pergunta2:str,dataframe:pd.Dat
 # for n,(disp,horas) in enumerate(resp.items()):
 #     axs[n].pie(horas.values(),labels= horas.keys(),autopct='%.0f%%')
 #     axs[n].set_title('Atrapalha' if  disp == 'Sim' else 'Não Atrapalha')
-# plt.savefig('intenet atrapalha x como se sente')
+# plt.savefig('img//intenet atrapalha x como se sente')
 # plt.close("all")
 
 # ## Como se sente em relação a computador X tempo de uso
