@@ -8,6 +8,7 @@ Para o utilizar este projeto é necessário ter instalado:
 - [Python 3.10.4](https://www.python.org/downloads/
 
 Para executar o scrip é nescessario ultilizar o comando:
+
 			python -m venv env
 			.\env\Scripts\activate
 			python -m pip install -r requirements.txt
