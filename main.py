@@ -89,9 +89,9 @@ perguntas_s_n_vet = ["Você utiliza a internet para trabalho?","Você utiliza a 
               "Você acredita que a internet atrapalha em sua formação?","Você considera as redes sociais um ambiente tóxico?",
               "Você utiliza a internet para fazer download de conteúdo?"]
 #label do grafico para perguntas acima
-perguntas_s_n_labels_vet = ['Para trabalho','Converça com amigos','Conversa com estranhos','Usa email','Pesquisas academicas',
-                            'Ver noticias','Compras','Ver vidios','Jogar','Atraplahar formação','Redes sociais toxicas',
-                            'Download de conteudo']
+perguntas_s_n_labels_vet = ['Para trabalho','Conversa com os amigos','Conversa com estranhos','Usa email','Pesquisas academicas',
+                            'Ver noticias','Compras','Ver vídeos','Jogar','Atrapalha a formação','Redes sociais tóxicas',
+                            'Download de conteúdo']
 #criando blocos de pergutnas
 block_size = 3 # quantidade de perguntas por grafico
 blocos = [ 
