@@ -1,5 +1,5 @@
-# trabalho-uso-interent-uefs
-Este repositocio contem o codigo utilizado para fazer as analizes estatisticas da pesquisa sobre uso da intenet na uefs, sendo o trabalho  final da materia Probabilidade e Estatística I (T04).
+# trabalho-uso-internet-uefs
+Este repositócio contém o código utilizado para fazer as análises estatisticas da pesquisa sobre uso da intenet na uefs, sendo o trabalho  final da materia Probabilidade e Estatística I (T04).
 
 
 ## Como utilizar ##
