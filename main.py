@@ -65,7 +65,7 @@ a['Renda_familiar_filtrado'] = a['Renda familiar'].apply(lambda c: "Até 1 salá
 # grafico de quantidade de intrevistado por categoria em renda familiar
 a['Renda_familiar_filtrado'].value_counts().plot.barh(figsize=(16,9), fontsize=(30))
 plt.subplots_adjust(left = 0.35 , right=.98)
-plt.savefig("img//distribuição renda familiarrenda familiar")
+plt.savefig("img//Renda familiar")
 plt.close("all")
 print()
 print("distribuição renda familiar")

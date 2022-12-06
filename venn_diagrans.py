@@ -43,7 +43,7 @@ def main(file = "Planilha sem título - Página1.csv"):
 
     from concurrent.futures import ProcessPoolExecutor
 
-
+    print('iniciando')
     #criando poll de thread
     with ProcessPoolExecutor() as executor:
         for n,q in enumerate(perguntas_s_n_vet[:-2]):
